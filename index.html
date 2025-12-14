@@ -3,18 +3,274 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Miraz TV Player</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <title>Pro HTML Player</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .player-container {
+            position: relative;
+            width: 90%;
+            max-width: 1000px;
+            height: 600px;
+            border: 2px solid #333;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #000;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .title-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0,0,0,0.7);
+            color: #fff;
+            padding: 10px;
+            font-size: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+        .fullscreen-btn {
+            background: #fff;
+            color: #000;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            z-index: 5;
+        }
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
 
-<div class="player-container">
-    <video id="liveTvPlayer" controls autoplay></video>
-</div>
+    <div class="player-container">
+        <div class="title-bar">
+            <span>Pro HTML Player</span>
+            <button class="fullscreen-btn" onclick="toggleFullscreen()">Fullscreen</button>
+        </div>
+        <div class="spinner" id="spinner"></div>
+        <iframe id="htmlPlayer" src=""></iframe>
+    </div>
 
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-<script src="script.js"></script>
+    <script>
+        const player = document.getElementById('htmlPlayer');
+        const spinner = document.getElementById('spinner');
 
+        // এখানে আপনার Vercel বা অন্য ওয়েবসাইট URL দিন
+        const url = "https://your-project.vercel.app";
+
+        // iframe লোড করা
+        player.src = url;
+
+        // Loading spinner show/hide
+        player.onload = () => {
+            spinner.style.display = 'none';
+        };
+
+        // Error handling
+        player.onerror = () => {
+            spinner.style.display = 'none';
+            alert('Failed to load the website.');
+        };
+
+        // Fullscreen toggle
+        function toggleFullscreen() {
+            if (player.requestFullscreen) {
+                player.requestFullscreen();
+            } else if (player.webkitRequestFullscreen) { /* Safari */
+                player.webkitRequestFullscreen();
+            } else if (player.msRequestFullscreen) { /* IE11 */
+                player.msRequestFullscreen();
+            }
+        }
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro HTML Player</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .player-container {
+            position: relative;
+            width: 90%;
+            max-width: 1000px;
+            height: 600px;
+            border: 2px solid #333;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #000;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .title-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0,0,0,0.7);
+            color: #fff;
+            padding: 10px;
+            font-size: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+        .fullscreen-btn {
+            background: #fff;
+            color: #000;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            z-index: 5;
+        }
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="player-container">
+        <div class="title-bar">
+            <span>Pro HTML Player</span>
+            <button class="fullscreen-btn" onclick="toggleFullscreen()">Fullscreen</button>
+        </div>
+        <div class="spinner" id="spinner"></div>
+        <iframe id="htmlPlayer" src=""></iframe>
+    </div>
+
+    <script>
+        const player = document.getElementById('htmlPlayer');
+        const spinner = document.getElementById('spinner');
+
+        // এখানে আপনার Vercel বা অন্য ওয়েবসাইট URL দিন
+        const url = "// 🔗 GITHUB RAW PLAYLIST LINK (.m3u)
+const playlistURL = "https://raw.githubusercontent.com/USERNAME/REPO/main/playlist.m3u";
+
+fetch(playlistURL)
+.then(res => res.text())
+.then(data => parseM3U(data));
+
+function parseM3U(data){
+    let lines = data.split("\n");
+    let list = document.getElementById("channelList");
+    list.innerHTML = "";
+
+    for(let i=0; i<lines.length; i++){
+        if(lines[i].startsWith("#EXTINF")){
+            let name = lines[i].split(",")[1];
+            let url = lines[i+1];
+
+            let li = document.createElement("li");
+            li.innerText = name;
+            li.onclick = () => playChannel(url);
+            list.appendChild(li);
+        }
+    }
+}
+
+function playChannel(url){
+    let video = document.getElementById("video");
+
+    if(Hls.isSupported()){
+        let hls = new Hls();
+        hls.loadSource(url);
+        hls.attachMedia(video);
+    } else {
+        video.src = url;
+    }
+    video.play();
+}
+";
+
+        // iframe লোড করা
+        player.src = url;
+
+        // Loading spinner show/hide
+        player.onload = () => {
+            spinner.style.display = 'none';
+        };
+
+        // Error handling
+        player.onerror = () => {
+            spinner.style.display = 'none';
+            alert('Failed to load the website.');
+        };
+
+        // Fullscreen toggle
+        function toggleFullscreen() {
+            if (player.requestFullscreen) {
+                player.requestFullscreen();
+            } else if (player.webkitRequestFullscreen) { /* Safari */
+                player.webkitRequestFullscreen();
+            } else if (player.msRequestFullscreen) { /* IE11 */
+                player.msRequestFullscreen();
+            }
+        }
+    </script>
 </body>
 </html>
 
