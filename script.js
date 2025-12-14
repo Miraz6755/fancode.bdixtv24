@@ -1,5 +1,5 @@
 // 🔗 GITHUB RAW PLAYLIST LINK (.m3u)
-const playlistURL = "https://raw.githubusercontent.com/USERNAME/REPO/main/playlist.m3u";
+const playlistURL = "https://raw.githubusercontent.com/subirkumarpaul/Subirmaxpro/refs/heads/main/Subirmaxpro";
 
 fetch(playlistURL)
 .then(res => res.text())
