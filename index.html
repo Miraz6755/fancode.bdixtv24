@@ -1,275 +1,102 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pro HTML Player</title>
+    <title>লাইভ টিভি চ্যানেল</title>
     <style>
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background: #f4f4f4;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
-        .player-container {
-            position: relative;
-            width: 90%;
-            max-width: 1000px;
-            height: 600px;
-            border: 2px solid #333;
-            border-radius: 10px;
-            overflow: hidden;
-            background: #000;
-        }
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-        .title-bar {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background: rgba(0,0,0,0.7);
+            background-color: #111;
             color: #fff;
-            padding: 10px;
-            font-size: 18px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 10;
         }
-        .fullscreen-btn {
-            background: #fff;
-            color: #000;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-            border-radius: 5px;
+        header {
+            background-color: #222;
+            padding: 15px;
+            text-align: center;
+            font-size: 24px;
             font-weight: bold;
         }
-        .spinner {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            border: 6px solid #f3f3f3;
-            border-top: 6px solid #3498db;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            z-index: 5;
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
         }
-        @keyframes spin {
-            0% { transform: translate(-50%, -50%) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        .channel {
+            background-color: #333;
+            margin: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            width: 300px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        .channel:hover {
+            transform: scale(1.05);
+        }
+        .channel video {
+            width: 100%;
+            border-radius: 8px;
+            background-color: #000;
+        }
+        .channel h3 {
+            margin: 10px 0 0 0;
+        }
+        footer {
+            background-color: #222;
+            text-align: center;
+            padding: 10px;
+            margin-top: 20px;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
+    <header>লাইভ টিভি চ্যানেল</header>
 
-    <div class="player-container">
-        <div class="title-bar">
-            <span>Pro HTML Player</span>
-            <button class="fullscreen-btn" onclick="toggleFullscreen()">Fullscreen</button>
+    <div class="container">
+        <div class="channel">
+            <video id="video1" controls></video>
+            <h3>চ্যানেল ১</h3>
         </div>
-        <div class="spinner" id="spinner"></div>
-        <iframe id="htmlPlayer" src=""></iframe>
+        <div class="channel">
+            <video id="video2" controls></video>
+            <h3>চ্যানেল ২</h3>
+        </div>
+        <div class="channel">
+            <video id="video3" controls></video>
+            <h3>চ্যানেল ৩</h3>
+        </div>
     </div>
 
+    <footer>&copy; 2025 লাইভ টিভি. সর্বস্বত্ব সংরক্ষিত।</footer>
+
+    <!-- hls.js লাইব্রেরি M3U8 এর জন্য -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script>
-        const player = document.getElementById('htmlPlayer');
-        const spinner = document.getElementById('spinner');
+        const channels = [
+            { id: 'video1', src: 'https://example.com/stream1.m3u8' },
+            { id: 'video2', src: 'https://example.com/stream2.m3u8' },
+            { id: 'video3', src: 'https://example.com/stream3.m3u8' }
+        ];
 
-        // এখানে আপনার Vercel বা অন্য ওয়েবসাইট URL দিন
-        const url = "https://your-project.vercel.app";
-
-        // iframe লোড করা
-        player.src = url;
-
-        // Loading spinner show/hide
-        player.onload = () => {
-            spinner.style.display = 'none';
-        };
-
-        // Error handling
-        player.onerror = () => {
-            spinner.style.display = 'none';
-            alert('Failed to load the website.');
-        };
-
-        // Fullscreen toggle
-        function toggleFullscreen() {
-            if (player.requestFullscreen) {
-                player.requestFullscreen();
-            } else if (player.webkitRequestFullscreen) { /* Safari */
-                player.webkitRequestFullscreen();
-            } else if (player.msRequestFullscreen) { /* IE11 */
-                player.msRequestFullscreen();
+        channels.forEach(channel => {
+            const video = document.getElementById(channel.id);
+            if(Hls.isSupported()) {
+                const hls = new Hls();
+                hls.loadSource(channel.src);
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                    // video.play(); // স্বয়ংক্রিয় প্লে করলে ব্রাউজারে প্রায়শই blocked হয়
+                });
+            } else if(video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = channel.src;
+            } else {
+                console.log("HLS not supported in this browser.");
             }
-        }
-    </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pro HTML Player</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f4f4f4;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
-        .player-container {
-            position: relative;
-            width: 90%;
-            max-width: 1000px;
-            height: 600px;
-            border: 2px solid #333;
-            border-radius: 10px;
-            overflow: hidden;
-            background: #000;
-        }
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-        .title-bar {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background: rgba(0,0,0,0.7);
-            color: #fff;
-            padding: 10px;
-            font-size: 18px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 10;
-        }
-        .fullscreen-btn {
-            background: #fff;
-            color: #000;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-            border-radius: 5px;
-            font-weight: bold;
-        }
-        .spinner {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            border: 6px solid #f3f3f3;
-            border-top: 6px solid #3498db;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            z-index: 5;
-        }
-        @keyframes spin {
-            0% { transform: translate(-50%, -50%) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) rotate(360deg); }
-        }
-    </style>
-</head>
-<body>
-
-    <div class="player-container">
-        <div class="title-bar">
-            <span>Pro HTML Player</span>
-            <button class="fullscreen-btn" onclick="toggleFullscreen()">Fullscreen</button>
-        </div>
-        <div class="spinner" id="spinner"></div>
-        <iframe id="htmlPlayer" src=""></iframe>
-    </div>
-
-    <script>
-        const player = document.getElementById('htmlPlayer');
-        const spinner = document.getElementById('spinner');
-
-        // এখানে আপনার Vercel বা অন্য ওয়েবসাইট URL দিন
-        const url = "// 🔗 GITHUB RAW PLAYLIST LINK (.m3u)
-const playlistURL = "https://raw.githubusercontent.com/USERNAME/REPO/main/playlist.m3u";
-
-fetch(playlistURL)
-.then(res => res.text())
-.then(data => parseM3U(data));
-
-function parseM3U(data){
-    let lines = data.split("\n");
-    let list = document.getElementById("channelList");
-    list.innerHTML = "";
-
-    for(let i=0; i<lines.length; i++){
-        if(lines[i].startsWith("#EXTINF")){
-            let name = lines[i].split(",")[1];
-            let url = lines[i+1];
-
-            let li = document.createElement("li");
-            li.innerText = name;
-            li.onclick = () => playChannel(url);
-            list.appendChild(li);
-        }
-    }
-}
-
-function playChannel(url){
-    let video = document.getElementById("video");
-
-    if(Hls.isSupported()){
-        let hls = new Hls();
-        hls.loadSource(url);
-        hls.attachMedia(video);
-    } else {
-        video.src = url;
-    }
-    video.play();
-}
-";
-
-        // iframe লোড করা
-        player.src = url;
-
-        // Loading spinner show/hide
-        player.onload = () => {
-            spinner.style.display = 'none';
-        };
-
-        // Error handling
-        player.onerror = () => {
-            spinner.style.display = 'none';
-            alert('Failed to load the website.');
-        };
-
-        // Fullscreen toggle
-        function toggleFullscreen() {
-            if (player.requestFullscreen) {
-                player.requestFullscreen();
-            } else if (player.webkitRequestFullscreen) { /* Safari */
-                player.webkitRequestFullscreen();
-            } else if (player.msRequestFullscreen) { /* IE11 */
-                player.msRequestFullscreen();
-            }
-        }
+        });
     </script>
 </body>
 </html>
